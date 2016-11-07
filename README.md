@@ -2,8 +2,8 @@
 
 Firstly, set up the required WordPress installation:
 
-- Import Example Post and Custom Field from `todolistapp.wordpress.2016-11-07.xml` using Wordpress Importer Tools
-- Set your permalink structure to "Day and name" (e.g., `http://dev.wp/2015/11/23/sample-post/`).
+- Set the project using local domain `todo-list.dev`
+- Import the Database `todo-list.sql` to your MySQL 
 
 Enter to directory `wp-content/themes/todo-list-theme/` and run:
 
@@ -27,6 +27,4 @@ Switch back to your terminal app and run:
 npm start
 ```
 
-in the theme's main directory. That will start Webpack dev server on `localhost:3000` and bundle the app into the `dist/` folder. In case we are already using the port `3000`.
-
-Open from browser `http://localhost:3000`
+Open the project in browser `http://localhost:3000`
