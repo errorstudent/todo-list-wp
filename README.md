@@ -12,12 +12,6 @@ Enter to directory `wp-content/themes/todo-list-theme/` and run:
 Create a new file `src/wp-url.js` with the following code:
 
 ```
-export const WP_URL = '<{URL of your blog}/wp-json/wp/v2';
-```
-
-to match your WordPress URL address. For example:
-
-```
 export const WP_URL = 'http://todo-list.dev/wp-json/wp/v2';
 ```
 
