@@ -1,24 +1,27 @@
 ## Getting Started
 
+
+## Running The Backend WP
 Firstly, set up the required WordPress installation:
 
 - Set the project using local domain `todo-list.dev`
 - Import the Database `todo-list.sql` to your MySQL 
 
-Enter to directory `wp-content/themes/todo-list-theme/` and run:
 
-```npm install```
+## Running The Frontend
 
-Create a new file `src/wp-url.js` with the following code:
+To start, make sure you're in the `wp-content/themes/todolist-theme/` folder in command-line.
 
+```sh
+# Install Node Modules
+npm install
+
+# Start the Server Only
+gulp
+
+# If you want to start he Server and edit the react code, this rebuilds
+gulp watch
 ```
-export const WP_URL = 'http://todo-list.dev/wp-json/wp/v2';
-```
 
-Switch back to your terminal app and run:
-
-```
-npm start
-```
 
 Open the project in browser `http://localhost:3000`

@@ -1,0 +1,99 @@
+/*
+ * Globals
+ */
+
+h1 {
+	font-size: 28px;
+}
+
+h2 {
+	font-size: 26px;
+}
+
+a {
+	color: #373a3c;
+}
+
+form label {
+	font-size: 12px;
+}
+
+/**
+ * Header
+ */
+.todo-header {
+	min-height: 150px;
+	margin: 30px 0 0;
+}
+
+.todo-header .nav-link {
+	margin-top: 30px;
+}
+
+/**
+ * ToDo
+ */
+.todo-results {
+	margin-top: 0;
+} 
+
+.todo-results .todo {
+	margin-bottom: 20px;
+	padding: 5px 0;
+}
+
+.todo-results .todo p,
+.todo-results .todo ul {
+	font-size: 14px;
+} 
+
+
+
+.todo-results .todo .category {
+	font-size: 12px;
+
+	margin-right: 10px;
+	padding: 5px 20px;
+
+	border-radius: 3px;
+	background: #ddd;
+} 
+
+.todo-results .todo .priority {
+	font-size: 12px;
+
+	display: inline-block;
+
+	margin-top: 20px;
+	padding: 5px 20px;
+
+	border: 1px solid #ddd;
+	border-radius: 3px;
+} 
+
+.todo-results .todo .btn-delete {
+	position: absolute;
+	right: 15px;
+
+	margin-top: 5px;
+	margin-left: 40px;
+}
+
+
+@media screen and (max-width: 480px) {
+	h1 {
+		font-size: 24px;
+	}
+
+	h2 {
+		font-size: 20px;
+	}
+
+	.todo-header {
+		min-height: 120px;
+	}
+
+	.todo-results .todo .btn-delete {
+		margin-top: 0;
+	}
+}

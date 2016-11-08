@@ -1,0 +1,10 @@
+// ToDo Layout
+export const LOAD_TODO_LAYOUT = 'LOAD_TODO_LAYOUT';
+
+// ToDo
+export const GET_TODOS_SUCCESS = 'GET_TODOS_SUCCESS';
+export const DELETE_TODO_SUCCESS = 'DELETE_TODO_SUCCESS';
+export const GET_TODO_SUCCESS = 'GET_TODO_SUCCESS';
+
+// User
+export const GET_USER_SUCCESS = 'GET_USER_SUCCESS';
