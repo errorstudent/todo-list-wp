@@ -1,16 +1,17 @@
 import axios from 'axios';
 import store from '../store';
-import { getToDosSuccess, deleteToDoSuccess, getToDoSuccess } from '../actions/todo-actions';
+import { Link, browserHistory  } from 'react-router';
+import { getToDosSuccess, deleteToDoSuccess, getToDoSuccess, createToDoSuccess } from '../actions/todo-actions';
 
 /**
  * Get all ToDo
  */
  export function getToDos() {
-  return axios.get('http://todo-list.dev/wp-json/wp/v2/posts')
-  .then(response => {
-    store.dispatch(getToDosSuccess(response.data));
-    return response;
-  });
+	return axios.get('http://todo-list.dev/wp-json/wp/v2/posts')
+	.then(response => {
+		store.dispatch(getToDosSuccess(response.data));
+		return response;
+	});
 }
 
 
@@ -19,37 +20,58 @@ import { getToDosSuccess, deleteToDoSuccess, getToDoSuccess } from '../actions/t
  */
 
  export function getToDo(todoId) {
-  return axios.get('http://todo-list.dev/wp-json/wp/v2/posts/' + todoId)
-  .then(response => {
-    store.dispatch(getToDoSuccess(response.data));
-    return response;
-  });
+	return axios.get('http://todo-list.dev/wp-json/wp/v2/posts/' + todoId)
+	.then(response => {
+		store.dispatch(getToDoSuccess(response.data));
+		return response;
+	});
 
 }
 
 /**
  * Post Todo
  */
- export function postToDo() {
-  return axios.post('http://todo-list.dev/wp-json/wp/v2/posts', {
-    'title' : 'Fred simanjuntak eaa',
-    'type': 'post'
-  }, {
-    auth: {
-      username: 'admin',
-      password: '1234'
-    },
+ export function createToDo(params) {
+	return axios.post('http://todo-list.dev/wp-json/wp/v2/posts', {
+		'title' : params.inputTitle.value,
+		'content' : params.inputDescription.value,
+		'categories' : params.inputCategories.value.split(','),
+		'status': 'publish'
+	}, {
+		auth: {
+			username: 'admin',
+			password: '1234'
+		},
 
-    headers: { 'Content-Type' : 'application/x-www-form-urlencoded;application/json'}
-  })
-  .then(response => {
-    console.log(response);
-    //store.dispatch(getUserSuccess(response.data));
-    return response;
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+		headers: { 'Content-Type' : 'application/json'}
+	})
+	.then(response => {
+
+		return Promise.all([
+	         axios.post('http://todo-list.dev/wp-json/acf/v2/post/' + response.data.id, {
+				fields: {
+					'priority' : params.inputPriority.value
+				}
+			}, {
+				auth: {
+					username: 'admin',
+					password: '1234'
+				},
+
+				headers: { 'Content-Type' : 'application/json'}
+			})
+	      ]).then(results => {
+
+			// Redirect to Home
+			browserHistory.replace('/');
+
+	        return;
+
+	      });
+	})
+	.catch(function (error) {
+		console.log(error);
+	});
 }
 
 
@@ -58,14 +80,14 @@ import { getToDosSuccess, deleteToDoSuccess, getToDoSuccess } from '../actions/t
  */
 
  export function deleteTodo(toDoId) {
-  return axios.delete('http://todo-list.dev/wp-json/wp/v2/posts/' + toDoId, {
-      auth: {
-        username: 'admin',
-        password: '1234'
-      }
-    })
-  .then(response => {
-    store.dispatch(deleteToDoSuccess(toDoId));
-    return response;
-  });
+	return axios.delete('http://todo-list.dev/wp-json/wp/v2/posts/' + toDoId, {
+			auth: {
+				username: 'admin',
+				password: '1234'
+			}
+		})
+	.then(response => {
+		store.dispatch(deleteToDoSuccess(toDoId));
+		return response;
+	});
 }

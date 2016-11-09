@@ -10,9 +10,7 @@ const userReducer = function(state = initialState, action) {
 	switch(action.type) {
 
 		case types.GET_USER_SUCCESS:
-		console.log(action.user);
-
-		return Object.assign({}, state, { user: action.user });
+			return Object.assign({}, state, { user: action.user });
 	}
 
 	return state;

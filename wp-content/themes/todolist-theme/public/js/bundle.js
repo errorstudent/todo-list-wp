@@ -66,7 +66,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	__webpack_require__(282).polyfill();
+	__webpack_require__(283).polyfill();
 	
 	// Provider is a top-level component that wrapps our entire application, including
 	// the Router. We pass it a reference to the store so we can use react-redux's
@@ -21605,8 +21605,6 @@
 		switch (action.type) {
 	
 			case types.GET_USER_SUCCESS:
-				console.log(action.user);
-	
 				return _extends({}, state, { user: action.user });
 		}
 	
@@ -21631,6 +21629,7 @@
 	var GET_TODOS_SUCCESS = exports.GET_TODOS_SUCCESS = 'GET_TODOS_SUCCESS';
 	var DELETE_TODO_SUCCESS = exports.DELETE_TODO_SUCCESS = 'DELETE_TODO_SUCCESS';
 	var GET_TODO_SUCCESS = exports.GET_TODO_SUCCESS = 'GET_TODO_SUCCESS';
+	var CREATE_TODO_SUCCESS = exports.CREATE_TODO_SUCCESS = 'CREATE_TODO_SUCCESS';
 	
 	// User
 	var GET_USER_SUCCESS = exports.GET_USER_SUCCESS = 'GET_USER_SUCCESS';
@@ -38667,7 +38666,7 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+		value: true
 	});
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -38685,46 +38684,51 @@
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	var initialState = {
-	  todos: [],
-	  todo: {
-	    id: '',
-	    title: {
-	      rendered: ''
-	    },
-	    content: {
-	      rendered: ''
-	    },
-	    categories: [],
-	    acf: {
-	      priority: ''
-	    }
-	  }
+		todos: [],
+		todo: {
+			id: '',
+			title: {
+				rendered: ''
+			},
+			content: {
+				rendered: ''
+			},
+			categories: [],
+			acf: {
+				priority: ''
+			}
+		}
 	};
 	
 	var toDoReducer = function toDoReducer() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
-	  var action = arguments[1];
+		var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+		var action = arguments[1];
 	
 	
-	  switch (action.type) {
+		switch (action.type) {
 	
-	    case types.GET_TODOS_SUCCESS:
-	      return _extends({}, state, { todos: action.todos });
+			case types.GET_TODOS_SUCCESS:
+				return _extends({}, state, { todos: action.todos });
 	
-	    case types.GET_TODO_SUCCESS:
-	      return _extends({}, state, { todo: action.todo });
+			case types.GET_TODO_SUCCESS:
+				return _extends({}, state, { todo: action.todo });
 	
-	    case types.DELETE_TODO_SUCCESS:
+			case types.CREATE_TODO_SUCCESS:
+				var newToDo = _lodash2.default.extend(state.todos, [action.todo]);
+				console.log(newToDo);
+				return _extends({}, state, { todos: newToDo });
 	
-	      // Use lodash to create a new user array without the user we want to remove
-	      var newToDos = _lodash2.default.filter(state.todos, function (todo) {
-	        return todo.id != action.toDoId;
-	      });
-	      return _extends({}, state, { todos: newToDos });
+			case types.DELETE_TODO_SUCCESS:
 	
-	  }
+				// Use lodash to create a new user array without the user we want to remove
+				var newToDos = _lodash2.default.filter(state.todos, function (todo) {
+					return todo.id != action.toDoId;
+				});
+				return _extends({}, state, { todos: newToDos });
 	
-	  return state;
+		}
+	
+		return state;
 	};
 	
 	exports.default = toDoReducer;
@@ -38806,7 +38810,7 @@
 	
 	var _todoCreateContainer2 = _interopRequireDefault(_todoCreateContainer);
 	
-	var _todoListDetailContainer = __webpack_require__(280);
+	var _todoListDetailContainer = __webpack_require__(281);
 	
 	var _todoListDetailContainer2 = _interopRequireDefault(_todoListDetailContainer);
 	
@@ -45171,7 +45175,7 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+		value: true
 	});
 	
 	var _react = __webpack_require__(1);
@@ -45199,24 +45203,24 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var ToDoListContainer = _react2.default.createClass({
-	  displayName: 'ToDoListContainer',
+		displayName: 'ToDoListContainer',
 	
 	
-	  componentDidMount: function componentDidMount() {
-	    toDoApi.getToDos();
-	    _store2.default.dispatch((0, _todoLayoutActions.loadToDoLayout)('todos', 'here are your list of todos'));
-	  },
+		componentDidMount: function componentDidMount() {
+			toDoApi.getToDos();
+			_store2.default.dispatch((0, _todoLayoutActions.loadToDoLayout)('todos', 'here are your list of todos'));
+		},
 	
-	  render: function render() {
-	    return _react2.default.createElement(_todoList2.default, { todos: this.props.todos, deleteTodo: toDoApi.deleteTodo });
-	  }
+		render: function render() {
+			return _react2.default.createElement(_todoList2.default, { todos: this.props.todos, deleteTodo: toDoApi.deleteTodo });
+		}
 	
 	});
 	
 	var mapStateToProps = function mapStateToProps(store) {
-	  return {
-	    todos: store.toDoState.todos
-	  };
+		return {
+			todos: store.toDoState.todos
+		};
 	};
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(ToDoListContainer);
@@ -45274,11 +45278,11 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+		value: true
 	});
 	exports.getToDos = getToDos;
 	exports.getToDo = getToDo;
-	exports.postToDo = postToDo;
+	exports.createToDo = createToDo;
 	exports.deleteTodo = deleteTodo;
 	
 	var _axios = __webpack_require__(256);
@@ -45289,6 +45293,8 @@
 	
 	var _store2 = _interopRequireDefault(_store);
 	
+	var _reactRouter = __webpack_require__(197);
+	
 	var _todoActions = __webpack_require__(277);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -45297,10 +45303,10 @@
 	 * Get all ToDo
 	 */
 	function getToDos() {
-	  return _axios2.default.get('http://todo-list.dev/wp-json/wp/v2/posts').then(function (response) {
-	    _store2.default.dispatch((0, _todoActions.getToDosSuccess)(response.data));
-	    return response;
-	  });
+		return _axios2.default.get('http://todo-list.dev/wp-json/wp/v2/posts').then(function (response) {
+			_store2.default.dispatch((0, _todoActions.getToDosSuccess)(response.data));
+			return response;
+		});
 	}
 	
 	/**
@@ -45308,33 +45314,51 @@
 	 */
 	
 	function getToDo(todoId) {
-	  return _axios2.default.get('http://todo-list.dev/wp-json/wp/v2/posts/' + todoId).then(function (response) {
-	    _store2.default.dispatch((0, _todoActions.getToDoSuccess)(response.data));
-	    return response;
-	  });
+		return _axios2.default.get('http://todo-list.dev/wp-json/wp/v2/posts/' + todoId).then(function (response) {
+			_store2.default.dispatch((0, _todoActions.getToDoSuccess)(response.data));
+			return response;
+		});
 	}
 	
 	/**
 	 * Post Todo
 	 */
-	function postToDo() {
-	  return _axios2.default.post('http://todo-list.dev/wp-json/wp/v2/posts', {
-	    'title': 'Fred simanjuntak eaa',
-	    'type': 'post'
-	  }, {
-	    auth: {
-	      username: 'admin',
-	      password: '1234'
-	    },
+	function createToDo(params) {
+		return _axios2.default.post('http://todo-list.dev/wp-json/wp/v2/posts', {
+			'title': params.inputTitle.value,
+			'content': params.inputDescription.value,
+			'categories': params.inputCategories.value.split(','),
+			'status': 'publish'
+		}, {
+			auth: {
+				username: 'admin',
+				password: '1234'
+			},
 	
-	    headers: { 'Content-Type': 'application/x-www-form-urlencoded;application/json' }
-	  }).then(function (response) {
-	    console.log(response);
-	    //store.dispatch(getUserSuccess(response.data));
-	    return response;
-	  }).catch(function (error) {
-	    console.log(error);
-	  });
+			headers: { 'Content-Type': 'application/json' }
+		}).then(function (response) {
+	
+			return Promise.all([_axios2.default.post('http://todo-list.dev/wp-json/acf/v2/post/' + response.data.id, {
+				fields: {
+					'priority': params.inputPriority.value
+				}
+			}, {
+				auth: {
+					username: 'admin',
+					password: '1234'
+				},
+	
+				headers: { 'Content-Type': 'application/json' }
+			})]).then(function (results) {
+	
+				// Redirect to Home
+				_reactRouter.browserHistory.replace('/');
+	
+				return;
+			});
+		}).catch(function (error) {
+			console.log(error);
+		});
 	}
 	
 	/**
@@ -45342,15 +45366,15 @@
 	 */
 	
 	function deleteTodo(toDoId) {
-	  return _axios2.default.delete('http://todo-list.dev/wp-json/wp/v2/posts/' + toDoId, {
-	    auth: {
-	      username: 'admin',
-	      password: '1234'
-	    }
-	  }).then(function (response) {
-	    _store2.default.dispatch((0, _todoActions.deleteToDoSuccess)(toDoId));
-	    return response;
-	  });
+		return _axios2.default.delete('http://todo-list.dev/wp-json/wp/v2/posts/' + toDoId, {
+			auth: {
+				username: 'admin',
+				password: '1234'
+			}
+		}).then(function (response) {
+			_store2.default.dispatch((0, _todoActions.deleteToDoSuccess)(toDoId));
+			return response;
+		});
 	}
 
 /***/ },
@@ -45365,6 +45389,7 @@
 	exports.getToDosSuccess = getToDosSuccess;
 	exports.deleteToDoSuccess = deleteToDoSuccess;
 	exports.getToDoSuccess = getToDoSuccess;
+	exports.createToDoSuccess = createToDoSuccess;
 	
 	var _actionTypes = __webpack_require__(192);
 	
@@ -45389,6 +45414,13 @@
 	function getToDoSuccess(todo) {
 	  return {
 	    type: types.GET_TODO_SUCCESS,
+	    todo: todo
+	  };
+	}
+	
+	function createToDoSuccess(todo) {
+	  return {
+	    type: types.CREATE_TODO_SUCCESS,
 	    todo: todo
 	  };
 	}
@@ -45437,101 +45469,41 @@
 	
 	var _reactRouter = __webpack_require__(197);
 	
+	var _todoApi = __webpack_require__(276);
+	
+	var toDoApi = _interopRequireWildcard(_todoApi);
+	
 	var _store = __webpack_require__(189);
 	
 	var _store2 = _interopRequireDefault(_store);
 	
 	var _todoLayoutActions = __webpack_require__(278);
 	
+	var _createTodoForm = __webpack_require__(280);
+	
+	var _createTodoForm2 = _interopRequireDefault(_createTodoForm);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var ToDoLayOutContainer = _react2.default.createClass({
-		displayName: 'ToDoLayOutContainer',
+	var ToDoCreateContainer = _react2.default.createClass({
+		displayName: 'ToDoCreateContainer',
 	
 	
 		componentDidMount: function componentDidMount() {
 			_store2.default.dispatch((0, _todoLayoutActions.loadToDoLayout)('create', 'create your todo:'));
 		},
 	
+		create: function create(event) {
+			event.preventDefault();
+			var params = this.refs.child.getParams();
+	
+			var result = toDoApi.createToDo(params);
+		},
+	
 		render: function render() {
-			return _react2.default.createElement(
-				'form',
-				null,
-				_react2.default.createElement(
-					'div',
-					{ className: 'form-group' },
-					_react2.default.createElement(
-						'label',
-						{ htmlFor: 'inputTitle' },
-						'Enter title of todo'
-					),
-					_react2.default.createElement('input', { type: 'text', className: 'form-control', id: 'inputTitle', name: 'inputTitle', placeholder: 'Enter Title' })
-				),
-				_react2.default.createElement(
-					'div',
-					{ className: 'form-group' },
-					_react2.default.createElement(
-						'label',
-						{ htmlFor: 'inputDescription' },
-						'Enter description of todos'
-					),
-					_react2.default.createElement('textarea', { className: 'form-control', id: 'inputDescription', name: 'inputDescription', rows: 3, defaultValue: "" })
-				),
-				_react2.default.createElement(
-					'div',
-					{ className: 'form-group' },
-					_react2.default.createElement(
-						'label',
-						{ htmlFor: 'exampleInputPassword1' },
-						'Password'
-					),
-					_react2.default.createElement('input', { type: 'password', className: 'form-control', id: 'exampleInputPassword1', placeholder: 'Password' })
-				),
-				_react2.default.createElement(
-					'div',
-					{ className: 'form-group' },
-					_react2.default.createElement(
-						'label',
-						{ htmlFor: 'inputTitle' },
-						'Enter categories, separate each category by comma'
-					),
-					_react2.default.createElement('input', { type: 'text', className: 'form-control', id: 'inputTitle', name: 'inputTitle', placeholder: 'Enter Title' })
-				),
-				_react2.default.createElement(
-					'div',
-					{ className: 'form-group' },
-					_react2.default.createElement(
-						'label',
-						{ htmlFor: 'inputPriority' },
-						'Select priority'
-					),
-					_react2.default.createElement(
-						'select',
-						{ className: 'form-control', id: 'inputPriority' },
-						_react2.default.createElement(
-							'option',
-							null,
-							'Low'
-						),
-						_react2.default.createElement(
-							'option',
-							null,
-							'Medium'
-						),
-						_react2.default.createElement(
-							'option',
-							null,
-							'High'
-						)
-					)
-				),
-				_react2.default.createElement('div', { className: 'clearfix' }),
-				_react2.default.createElement(
-					'button',
-					{ type: 'submit', className: 'btn btn-primary' },
-					'Save'
-				)
-			);
+			return _react2.default.createElement(_createTodoForm2.default, { create: this.create, ref: 'child' });
 		}
 	
 	});
@@ -45545,10 +45517,107 @@
 		};
 	};
 	
-	exports.default = (0, _reactRedux.connect)(mapStateToProps)(ToDoLayOutContainer);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(ToDoCreateContainer);
 
 /***/ },
 /* 280 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = _react2.default.createClass({
+		displayName: "create-todo-form",
+	
+	
+		getParams: function getParams() {
+			return this.refs;
+		},
+	
+		render: function render() {
+			return _react2.default.createElement(
+				"form",
+				{ onSubmit: this.props.create },
+				_react2.default.createElement(
+					"div",
+					{ className: "form-group" },
+					_react2.default.createElement(
+						"label",
+						{ htmlFor: "inputTitle" },
+						"Enter title of todo"
+					),
+					_react2.default.createElement("input", { type: "text", className: "form-control", id: "inputTitle", ref: "inputTitle" })
+				),
+				_react2.default.createElement(
+					"div",
+					{ className: "form-group" },
+					_react2.default.createElement(
+						"label",
+						{ htmlFor: "inputDescription" },
+						"Enter description of todos"
+					),
+					_react2.default.createElement("textarea", { className: "form-control", id: "inputDescription", ref: "inputDescription", rows: 3, defaultValue: "" })
+				),
+				_react2.default.createElement(
+					"div",
+					{ className: "form-group" },
+					_react2.default.createElement(
+						"label",
+						{ htmlFor: "inputCategories" },
+						"Enter categories, separate each category by comma"
+					),
+					_react2.default.createElement("input", { type: "text", className: "form-control", id: "inputCategories", ref: "inputCategories" })
+				),
+				_react2.default.createElement(
+					"div",
+					{ className: "form-group" },
+					_react2.default.createElement(
+						"label",
+						{ htmlFor: "inputPriority" },
+						"Select priority"
+					),
+					_react2.default.createElement(
+						"select",
+						{ className: "form-control", id: "inputPriority", ref: "inputPriority" },
+						_react2.default.createElement(
+							"option",
+							{ value: "low" },
+							"Low"
+						),
+						_react2.default.createElement(
+							"option",
+							{ value: "medium" },
+							"Medium"
+						),
+						_react2.default.createElement(
+							"option",
+							{ value: "high" },
+							"High"
+						)
+					)
+				),
+				_react2.default.createElement("div", { className: "clearfix" }),
+				_react2.default.createElement(
+					"button",
+					{ className: "btn btn-primary" },
+					"Save"
+				)
+			);
+		}
+	
+	});
+
+/***/ },
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45563,7 +45632,7 @@
 	
 	var _reactRedux = __webpack_require__(159);
 	
-	var _todoListDetail = __webpack_require__(281);
+	var _todoListDetail = __webpack_require__(282);
 	
 	var _todoListDetail2 = _interopRequireDefault(_todoListDetail);
 	
@@ -45606,7 +45675,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(ToDoListDetailContainer);
 
 /***/ },
-/* 281 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -45662,7 +45731,7 @@
 	});
 
 /***/ },
-/* 282 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var require;/* WEBPACK VAR INJECTION */(function(process, global) {/*!
@@ -45801,7 +45870,7 @@
 	function attemptVertx() {
 	  try {
 	    var r = require;
-	    var vertx = __webpack_require__(283);
+	    var vertx = __webpack_require__(284);
 	    vertxNext = vertx.runOnLoop || vertx.runOnContext;
 	    return useVertxTimer();
 	  } catch (e) {
@@ -46825,7 +46894,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), (function() { return this; }())))
 
 /***/ },
-/* 283 */
+/* 284 */
 /***/ function(module, exports) {
 
 	/* (ignored) */

@@ -7,23 +7,23 @@ import { loadToDoLayout } from '../../actions/todo-layout-actions';
 
 const ToDoListContainer = React.createClass({
 
-  componentDidMount: function() {
-    toDoApi.getToDos();
-    store.dispatch(loadToDoLayout('todos', 'here are your list of todos'));
-  },
+	componentDidMount: function() {
+		toDoApi.getToDos();
+		store.dispatch(loadToDoLayout('todos', 'here are your list of todos'));
+	},
 
-  render: function() {
-    return (
-      <ToDoList todos={this.props.todos} deleteTodo={toDoApi.deleteTodo} />
-    );
-  }
+	render: function() {
+		return (
+			<ToDoList todos={this.props.todos} deleteTodo={toDoApi.deleteTodo} />
+		);
+	}
 
 });
 
 const mapStateToProps = function(store) {
-  return {
-    todos: store.toDoState.todos
-  };
+	return {
+		todos: store.toDoState.todos
+	};
 };
 
 export default connect(mapStateToProps)(ToDoListContainer);

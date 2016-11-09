@@ -20,3 +20,10 @@ export function getToDoSuccess(todo) {
     todo
   };
 }
+
+export function createToDoSuccess(todo) {
+  return {
+    type: types.CREATE_TODO_SUCCESS,
+    todo
+  };
+}
