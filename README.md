@@ -4,7 +4,7 @@
 ## Running The Backend WP
 Firstly, set up the required WordPress installation:
 
-- Set the project using local domain `todo-list.dev`
+- Make sure the project using local domain `todo-list.dev`. Set `todo-list.dev` on your `VirtualHost` apache.
 - Import the Database `todo-list.sql` to your MySQL 
 
 
