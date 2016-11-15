@@ -1,5 +1,12 @@
-<?php
+<!DOCTYPE html>
+<html>
+<head>
+	<title><?php bloginfo();?></title>
+	<?php wp_head(); ?>
+</head>
+<body>
+    <div id="root"></div>
 
-get_header();
-
-get_footer();
+	<?php wp_footer(); ?>
+</body>
+</html>

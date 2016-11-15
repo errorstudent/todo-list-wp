@@ -1,93 +1,100 @@
-import axios from 'axios';
+import WPAPI from 'wpapi';
 import store from '../store';
-import { Link, browserHistory  } from 'react-router';
+import { browserHistory  } from 'react-router';
 import { getToDosSuccess, deleteToDoSuccess, getToDoSuccess, createToDoSuccess } from '../actions/todo-actions';
 
+var wp = new WPAPI({
+	endpoint: window.WP_API_Settings.endpoint,
+	nonce: window.WP_API_Settings.nonce
+});
+
+
 /**
- * Get all ToDo
+ * Get All ToDo
  */
  export function getToDos() {
-	return axios.get('http://todo-list.dev/wp-json/wp/v2/posts')
-	.then(response => {
-		store.dispatch(getToDosSuccess(response.data));
-		return response;
-	});
-}
+ 	return wp.posts().get(function( err, data ) {
+ 		if ( err ) {
+ 			console.log(err);
+ 		}
+ 		store.dispatch(getToDosSuccess(data));
+ 		return data;
+ 	});
+ }
 
 
 /**
  * Get ToDo
  */
-
  export function getToDo(todoId) {
-	return axios.get('http://todo-list.dev/wp-json/wp/v2/posts/' + todoId)
-	.then(response => {
-		store.dispatch(getToDoSuccess(response.data));
-		return response;
-	});
-
-}
+ 	return wp.posts().id(todoId).get(function( err, data ) {
+ 		if ( err ) {
+ 			console.log(err);
+ 		}
+ 		store.dispatch(getToDoSuccess(data));
+ 		return data;
+ 	});
+ }
 
 /**
  * Post Todo
  */
  export function createToDo(params) {
-	return axios.post('http://todo-list.dev/wp-json/wp/v2/posts', {
-		'title' : params.inputTitle.value,
-		'content' : params.inputDescription.value,
-		'categories' : params.inputCategories.value.split(','),
-		'status': 'publish'
-	}, {
-		auth: {
-			username: 'admin',
-			password: '1234'
-		},
+ 	wp.posts().create({
+ 		title : params.inputTitle.value,
+ 		content : params.inputDescription.value,
+ 		fields : {
+ 			priority : params.inputPriority.value
+ 		},
+ 		status: 'publish'
+ 	}).then(function( response ) {
+ 		let categories = params.inputCategories.value.split(',');
+ 		let catIds = new Array();
 
-		headers: { 'Content-Type' : 'application/json'}
-	})
-	.then(response => {
+ 		var promises = categories.map( function(name) { 
+ 			return new Promise(function(resolve, reject) {
+ 				wp.categories().search( name ).then(function(category) {
+ 					if(category.length > 0) {
+ 						category.map(function(cat) {
+ 							catIds.push(cat.id);
+ 						});
+ 					}else{
+ 						wp.categories().create({
+ 							name: name
+ 						}).then(function(result) {
+ 							catIds.push(result.id);
+ 						});
+ 					}
 
-		return Promise.all([
-	         axios.post('http://todo-list.dev/wp-json/acf/v2/post/' + response.data.id, {
-				fields: {
-					'priority' : params.inputPriority.value
-				}
-			}, {
-				auth: {
-					username: 'admin',
-					password: '1234'
-				},
+ 					resolve();
+ 				}).catch(function( err ) {
+ 					return reject(err);
+ 				});
+ 			});
+ 		});
 
-				headers: { 'Content-Type' : 'application/json'}
-			})
-	      ]).then(results => {
-
-			// Redirect to Home
-			browserHistory.replace('/');
-
-	        return;
-
-	      });
-	})
-	.catch(function (error) {
-		console.log(error);
-	});
-}
+ 		Promise.all(promises)
+ 		.then(function() { 
+ 			wp.posts(response.id).id(response.id).update({
+ 				categories: catIds	
+ 			}).then(function() {
+ 				browserHistory.replace('/');
+ 			});
+ 		})
+ 		.catch(console.error);
+ 	})
+ }
 
 
 /**
  * Delete a ToDo
  */
-
  export function deleteTodo(toDoId) {
-	return axios.delete('http://todo-list.dev/wp-json/wp/v2/posts/' + toDoId, {
-			auth: {
-				username: 'admin',
-				password: '1234'
-			}
-		})
-	.then(response => {
-		store.dispatch(deleteToDoSuccess(toDoId));
-		return response;
-	});
-}
+ 	return wp.posts().id( toDoId ).delete(function( err, data ) {
+ 		if ( err ) {
+ 			console.log(err);
+ 		}
+ 		store.dispatch(deleteToDoSuccess(toDoId));
+ 		return data;
+ 	});
+ }

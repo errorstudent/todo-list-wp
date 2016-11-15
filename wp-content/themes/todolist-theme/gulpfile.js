@@ -28,12 +28,6 @@ gulp.task('watch:build', function() {
 });
 
 
-gulp.task('serve:api', function(done) {
-  cp.exec('node ./node_modules/json-server/bin/index.js --watch ./data/db.json --port 3001', {stdio: 'inherit'})
-    .on('close', done);
-});
-
-
 /**
  * Node Server (Express)
  */
@@ -51,6 +45,6 @@ gulp.task('serve:node', function(done) {
  * Main tasks
  */
 
-gulp.task('serve', ['serve:node', 'serve:api']);
+gulp.task('serve', ['serve:node']);
 gulp.task('watch', ['serve', 'build', 'watch:build']);
-gulp.task('default', ['serve']);
+gulp.task('default', ['build']);

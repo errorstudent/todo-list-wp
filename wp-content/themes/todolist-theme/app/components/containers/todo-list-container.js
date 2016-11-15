@@ -9,7 +9,7 @@ const ToDoListContainer = React.createClass({
 
 	componentDidMount: function() {
 		toDoApi.getToDos();
-		store.dispatch(loadToDoLayout('todos', 'here are your list of todos'));
+		store.dispatch(loadToDoLayout('todos', 'here are your list of todos'));		
 	},
 
 	render: function() {
