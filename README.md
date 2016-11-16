@@ -11,6 +11,9 @@ Firstly, set up the required WordPress installation:
 To start, make sure you're in the `wp-content/themes/todolist-theme/` folder in command-line.
 
 ```sh
+# Install Node Modules
+npm install
+
 # Build Source
 gulp
 ```
